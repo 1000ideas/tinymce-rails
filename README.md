@@ -1,6 +1,6 @@
 # Tinymce::Rails
 
-TODO: Write a gem description
+TinyMCE 4 and Rails assets pipeline integration
 
 ## Installation
 
