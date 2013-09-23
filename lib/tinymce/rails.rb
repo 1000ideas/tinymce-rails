@@ -1,7 +1,10 @@
 require "tinymce/rails/version"
+require "tinymce/rails/engine"
+require "tinymce/rails/helpers"
+require "tinymce/rails/configuration"
 
-module Tinymce
+module TinyMCE
   module Rails
-    # Your code goes here...
+    
   end
 end

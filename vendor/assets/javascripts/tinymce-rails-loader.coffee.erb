@@ -1,0 +1,28 @@
+class TinyMCELoader
+  @_available_locales = <%= TinyMCE.available_locales.to_json %>
+  @_config = <%= TinyMCE.config.to_json %>
+
+  constructor: ($) ->
+    that = this
+
+    $('textarea[data-tinymce]').each (idx, el) ->
+      type = $(el).data('tinymce') ? 'default'
+      type = 'default' unless TinyMCELoader._config[type]?
+      options = $.extend {}, TinyMCELoader._config[type], {
+        language: that.lang()
+      }
+      $(el).tinymce(options)
+
+  lang: ->
+    unless @_lang?
+      @_lang = $('html').attr('lang')
+      @_lang ?= 'en'
+      _exists = false
+      for locale in TinyMCELoader._available_locales
+        _exists = true if @_lang == locale
+      @_lang = 'en' unless _exists
+    @_lang
+
+jQuery ->
+  new TinyMCELoader(jQuery)
+

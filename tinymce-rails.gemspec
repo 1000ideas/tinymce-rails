@@ -5,11 +5,11 @@ require 'tinymce/rails/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "tinymce-rails"
-  spec.version       = Tinymce::Rails::VERSION
+  spec.version       = TinyMCE::Rails::VERSION
   spec.authors       = ["Bartek Bulat"]
   spec.email         = ["bartek@1000i.pl"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Gem for integration TinyMCE 4 and Rails}
+  spec.summary       = %q{Gem for integration TinyMCE 4 and Rails}
   spec.homepage      = ""
   spec.license       = "MIT"
 
