@@ -1,0 +1,36 @@
+pl:
+  tiny_mce:
+    folders:
+      folder:
+        confirm: "Usunąć cały folder z jego zawartością?"
+        delete: "Usuń"
+        rename: "Zmień nazwę"
+        name: "Nowa nazwa folderu"
+    uploads:
+      index:
+        root: "Dysk C:"
+        upload: "Wgraj plik"
+        folder: "Nowy folder"
+        folder_name: "Nazwa"
+      breadcrumbs:
+        root: "Dysk C:"
+      empty:
+        name: "Brak elementów"
+      drop:
+        success: "Przeniesiono plik"
+      upload:
+        confirm: "Usunąć wybrany plik?"
+        delete: "Usuń"
+        rename: "Zmień opis"
+        name: "Nowy opis pliku"
+  activerecord:
+    attributes:
+      tiny_mce/folder:
+        name: Nazwa folderu
+    errors:
+      models:
+        tiny_mce/folder:
+          attributes:
+            name:
+              blank: nie może być pusta
+              blank: nie może się powtarzać w obrębie folderu

@@ -8,8 +8,12 @@ module TinyMCE::Rails
       end | ['en']
     end
 
-    def config
-      @config ||= Configuration.new
+    def styles
+      @styles = Configuration.new
+    end
+
+    def style_defined? (name)
+      styles.to_hash.has_key?(name)
     end
   end
 end

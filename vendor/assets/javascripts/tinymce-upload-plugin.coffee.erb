@@ -1,0 +1,272 @@
+
+# loadSkin = (_default = 'lightgray') ->
+#   editor = top.tinymce.activeEditor
+#   settings = editor.settings
+#   skin = if settings.skin != false then (settings.skin ? _default) else false
+
+#   if skin
+#     skinUrl = settings.skin_url
+#     if skinUrl
+#       skinUrl = editor.documentBaseURI.toAbsolute(skinUrl)
+#     else
+#       skinUrl = tinymce.baseURL + '/skins/' + skin
+#     tinymce.DOM.loadCSS(skinUrl + '/skin.min.css')
+
+# loadSkin()
+
+class TinyMCEUploadPlugin
+  constructor: ->
+    self = this
+    @tinymce = top.tinymce
+    @editor = @tinymce.activeEditor
+    @wm = @editor.windowManager
+    @plugin = @editor.plugins.upload
+    
+    @files = $('#upload-list-box ul')
+
+    @_set_draggable()
+
+    @files.selectable(
+      filter: 'li:not(.empty)'
+      selected:  (event, ui) ->
+        if $(this).find('.ui-selected').length > 1
+          $(ui.selected).removeClass('ui-selected')
+          return false
+      unselected: (event, ui) ->
+        self.plugin.setCurrentItem(null);
+    )
+
+    @folder = $('#create-folder').bind 'click', (event) ->
+      event.preventDefault()
+      
+      _data = {
+        folder: {
+          parent_id: $('#folder_parent_id').val()
+        }
+      }
+
+      _url = $(this).data('url')
+      title = $(this).text()
+      label = $(this).data('prompt')
+
+      self.prompt title, label, (name) -> 
+        _data.folder.name = name
+
+        $.ajax {
+          url: _url
+          method: 'post'
+          dataType: 'script'
+          data: _data
+        }
+
+    @folders = $('#folder-list-box ul li a.name, #folder-list-box h2 a')
+      .droppable @_droppable_options()
+
+    @uploader = $('#fileupload-wrapper input[type="file"]').fileupload {
+      dataType: 'script'
+      autoUpload: true
+      formData: (form) ->
+        parent = $('#folder_parent_id').val()
+        [{ name: 'upload[folder_id]', value: parent }]
+
+    }
+
+    @sort()
+    @_extend_rails_ujs()
+    @_init_context_menu()
+
+  sort: (field, order) ->
+    field ?= @files.data('sort') ? 'name'
+    order ?= @files.data('sort-order') ? 'asc'
+
+    @files.children().tsort("p.#{field}", {order: order, data: 'value'})
+
+    @files.data('sort', field)
+    @files.data('sort-order', order)
+
+  alert: (text) ->
+    @wm.alert(text)
+
+  confirm: (text, callback) ->
+    @wm.confirm text, callback
+
+  prompt: (title, label, current, callback) ->
+    unless callback?
+      callback = current
+      current = ""
+
+    self = this
+    _prompt = @wm.open {
+      title: title
+      body: {
+        type: 'textbox',
+        name: 'value',
+        label: label,
+        value: current.toString()
+      }
+      onsubmit: (event) ->
+        callback.call(self, event.data.value)
+      onkeyup: (event) ->
+        _prompt.statusbar.items()[0].disabled(this.value.length == 0)
+    }
+
+    _prompt.statusbar.items()[0].disabled(true)
+    _prompt
+
+  _set_draggable: ->
+    self = this
+    
+    @files.children('li:not(.empty)').draggable(
+      distance: 10
+      revert: 'invalid'
+    ).bind(
+      'click',
+      (event) ->
+        if $(this).hasClass 'ui-selected'
+          $(this).removeClass 'ui-selected'
+        else
+          $(this).siblings('li').removeClass('ui-selected')
+          $(this).addClass 'ui-selected'
+
+        info = $(this).filter('.ui-selected').data() ? {}
+        self.plugin.setCurrentItem(info.name, info.link, info.image);
+    )
+    
+
+  _confirmation_popup: (link) ->
+    @wm.confirm link.data('confirm'), (status) ->
+      $.rails.confirmLink(link) if status
+
+  _extend_rails_ujs: ->
+    self = this
+
+    $.rails.allowAction = (link) ->
+      return true if ! link.data('confirm') || link.data('confirmed') == true
+      self._confirmation_popup link
+      false
+
+    $.rails.confirmLink = (link) ->
+      link.data('confirmed', true)
+      link.trigger('click.rails')
+      link.data('confirmed', false)
+
+    $.rails.href = (element) ->
+      element.attr('href') ? element.data('url')
+
+  _droppable_options: ->
+    self = this
+    {
+      accept: 'li'
+      greedy: true
+      hoverClass: 'drop-hover'
+      tolerance: "pointer"
+      drop: (event, ui) ->
+        _url = $('#folder-list-box')
+          .data('url')
+          .replace(':id', $(ui.draggable).data('uid'))
+          .replace(':folder_id', $(this).data('fid') ? "")
+
+        $(ui.draggable).hide()
+
+        $.ajax {
+          url: _url
+          dataType: 'json'
+          method: 'post',
+          data: {_method: 'put'}
+          success: (data) ->
+            $(ui.draggable).remove()
+            self.wm.alert(data.notice)
+          error: (data) ->
+            $(ui.draggable).css {
+              top: ''
+              left: ''
+              display: ''
+            }
+            self.wm.alert(data.join('. ') + '.')
+        }
+
+        true
+    }
+
+  _init_context_menu: ->
+    self = this
+    @_last_menu = null
+
+    _iframe_position = ->
+      _iframe = self.plugin.win.getEl().getElementsByTagName('iframe')[0]
+      _p = self.tinymce.DOM.getPos(_iframe);
+      # debugger
+      _p.y -= scrollY
+      _p
+
+    _action_to_item = (element) ->
+      title = element.text()
+      confirm = element.data('confirm')
+      prompt = element.data('prompt')
+      current = element.data('value')
+
+      new self.tinymce.ui.MenuItem {
+        text: title
+        onclick: (event) ->
+          if confirm?
+            self.confirm confirm, (status) ->
+              if status
+                $.rails.handleRemote element
+          else if prompt?
+            self.prompt title, prompt, current, (value) ->
+              _data = element.data('params') ? {}
+              $.extend(_data, {value: value})
+              element.data('params', _data)
+              $.rails.handleRemote element
+          else
+            $.rails.handleRemote element
+
+      }
+
+    $(document).on 'click contextmenu', (event) ->
+      return if event.type == 'contextmenu' and ( $(event.target).data('menu')? or $(event.target).parent().data('menu')? )
+      if self._last_menu?
+        self._last_menu.hide()
+        self._last_menu = null
+
+    $(document).on 'contextmenu', '#folder-list-box ul li a.name, #upload-list-box ul li', (event) ->
+      event.preventDefault()
+      element = $(this)
+      menu = null
+
+      if self._last_menu?
+        self._last_menu.hide()
+        self._last_menu = null
+
+      if element.data('menu')?
+        menu = element.data('menu')
+        menu.show()
+      else
+        items = []
+        element.find('.actions > span').each ->
+          items.push _action_to_item( $(this) )
+
+        menu = new self.tinymce.ui.Menu {
+          items: items
+        }
+
+        menu.renderTo(top.document.body)
+
+        self.editor.on 'remove', ->
+          menu.remove()
+          menu = null
+
+        element.data('menu', menu)
+
+      position = _iframe_position()
+      position.x += event.pageX
+      position.y += event.pageY
+
+      menu.moveTo(position.x, position.y)
+      self._last_menu = menu
+
+
+
+
+jQuery ->
+  window.tinymceUploadPlugin = new TinyMCEUploadPlugin()

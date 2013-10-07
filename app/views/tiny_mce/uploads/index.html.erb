@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>File manager 2</title>
+  <%= javascript_include_tag 'tinymce-rails-upload' %>
+  <%= stylesheet_link_tag 'tinymce-rails-upload' %>
+</head>
+<body style="margin: 0;">
+  <header>
+    <div class="buttons">
+      <%= hidden_field_tag 'folder[parent_id]', @folder.try(:id) %>
+      <%= button_tag :'fileupload-wrapper', id: :'fileupload-wrapper', class: :'fileupload-wrapper' do %>
+        <span><%= t('.upload') %></span>
+        <%= file_field_tag 'upload[file]', data: {url: tiny_mce.uploads_path(format: :js)} %>
+      <% end %>
+      <%= button_tag t('.folder'), id: :'create-folder', data: {url: tiny_mce.folder_uploads_path(format: :js), prompt: t('.folder_name')} %>
+    </div>
+    <%= render 'breadcrumbs', folder: @folder %>
+  </header>
+  <section class="content">
+    <div id="folder-list-box" data-url="<%= tiny_mce.drop_upload_path(id: ':id', folder_id: ':folder_id') %>">
+      <h2><%= link_to t('.root'), tiny_mce.uploads_path(format: :js), data: {remote: true} %></h2>
+      <ul>
+        <%= render @folders, current: @folder %>
+      </ul>
+    </div>
+    <div id="upload-list-box">
+      <ul>
+        <% if @uploads.any? %>
+          <%= render @uploads %>          
+        <% else %>
+          <%= render 'empty' %>
+        <% end %>
+      </ul>
+    </div>
+  </section>
+</body>
+</html>

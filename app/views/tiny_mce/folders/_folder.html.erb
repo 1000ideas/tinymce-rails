@@ -1,0 +1,14 @@
+<li class="<%= "current" if current == folder %>">
+  <%= link_to tiny_mce.uploads_path(parent: folder.id, format: :js), data: {remote: true, fid: folder.id}, class: :name do %>
+    <%= folder.name %>
+    <div class="actions">
+      <%= content_tag :span, t('.delete'), data: {method: :delete, remote: true, confirm: t('.confirm', default: "Sure?"), url: tiny_mce.destroy_folder_uploads_path(id: folder.id, format: :js)}  %>
+      <%= content_tag :span, t('.rename'), data: {method: :put, remote: true, prompt: t('.name'), value: folder.name, params: {column: :name}, url: tiny_mce.update_folder_uploads_path(id: folder.id, current: current.try(:id), format: :js)}  %>
+    </div>
+  <% end %>
+  <% if folder.children.any? %>
+    <ul>
+      <%= render folder.children, current: current %>
+    </ul>
+  <% end %>
+</li>

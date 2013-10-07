@@ -1,7 +1,7 @@
 class TinyMCELoader
   @_available_locales = <%= TinyMCE.available_locales.to_json %>
-  @_config = <%= TinyMCE.config.to_json %>
-
+  @_config = <%= TinyMCE.styles.to_json %>  
+  
   constructor: ($) ->
     that = this
 
@@ -25,4 +25,5 @@ class TinyMCELoader
 
 jQuery ->
   new TinyMCELoader(jQuery)
+  true
 

@@ -1,0 +1,194 @@
+/*
+ *= require jquery.ui.selectable
+ *= require_self
+ */
+
+ @mixin _button {
+  display: inline-block;
+  cursor: pointer;
+  box-sizing: content-box;
+  border: 1px solid #ddd;
+  padding: 1em;
+  background: #fff;
+}
+
+body {
+  font-size: 12px;
+
+}
+
+button {
+  @include _button;
+}
+
+.fileupload-wrapper {
+  position: relative;
+  overflow: hidden;
+  @include _button;
+  
+  
+  input[type=file] {
+    position: absolute;
+    opacity: 0;
+    top: 50%;
+    right: 0;
+    height: 1em;
+    font-size: 10em;
+    margin: 0;
+    border: 0;
+    margin-top: -.5em;
+    cursor: pointer;
+  }
+}
+
+ul.ui-selectable {
+  li.ui-selectee {
+    background: #fff;
+    cursor: pointer;
+
+    &.ui-selected {
+      background: #f00;
+    }
+  }
+}
+
+ul.breadcrumbs {
+
+  li {
+
+    &:not(.root):before {
+      // content: '»';      
+      content: '/';      
+    }
+
+    display: inline;
+
+    a {
+      color: #333;
+      text-decoration: none;
+    }
+
+  }
+}
+
+section.content {
+  background: #eee;
+
+  &:after {
+    content: '';
+    clear: both;
+    display: table;
+  }
+
+  > div {
+    box-sizing: border-box;
+    padding: 1em;
+  }
+
+  #folder-list-box {
+    float: left;
+    width: 25%;
+
+    @mixin _folder {
+      &.drop-hover {
+        outline: 1px dashed #888;
+      }
+      display: inline-block;
+      line-height: 2em;
+      padding: 0 .5em;
+      text-decoration: none;
+      color: #333;      
+    }
+
+    h2 {
+      a {
+        @include _folder;
+      }
+    }
+
+    > ul {
+      list-style: none;
+      padding: 0;
+
+
+
+      li {
+        border-left: 1px solid #888;
+        padding-left: 10px;
+        position: relative;
+
+        &:before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 1em;
+          width: 5px;
+          border-bottom: 1px solid #888;
+        }
+        &:last-child {
+          border-left: 0;
+          padding-left: 11px;
+          &:before {
+            border-left: 1px solid #888;
+          }
+
+        }
+
+        &.current > a {
+          background: #aaa;
+        }
+
+        ul{
+          list-style: none;
+          padding: 0;
+        }
+
+        > a {
+         @include _folder;
+        }
+
+        div.actions {
+          display: none;
+        }
+
+      }
+    }
+  }
+
+  #upload-list-box {
+    background: #fff;
+    float: left;
+    width: 75%;
+    min-height: 500px;
+    ul {
+      list-style: none;
+      padding: 0;
+
+      > li {
+        &.ui-draggable-dragging {
+          opacity: .4;
+          z-index: 2;
+
+        }
+        display: inline-block;
+        width: 100px;
+        padding: .5em;
+        border: 1px solid #ddd;
+        margin: .5em;
+        vertical-align: top;
+
+        div.actions {
+          display: none;
+        }
+
+        p.name {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+}

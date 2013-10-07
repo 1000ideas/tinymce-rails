@@ -1,0 +1,11 @@
+//= require_self
+//= require tinymce/tinymce
+//= require tinymce/jquery.tinymce.min
+//= require tinymce-rails-loader
+//
+
+window.tinyMCEPreInit = window.tinyMCEPreInit || {
+  base:   '<%= TinyMCE::Rails::Engine.base %>',
+  query:  '<%= TinyMCE::Rails::VERSION %>',
+  suffix: ''
+};

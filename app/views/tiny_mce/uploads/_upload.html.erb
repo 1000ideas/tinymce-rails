@@ -1,0 +1,11 @@
+<%= content_tag :li, data: {uid: upload.id, name: upload.title, link: upload.file.url, image: upload.image? } do %>
+  <% unless upload.thumb.nil? %>
+    <%= image_tag upload.thumb %>
+  <% end %>
+  <p class="name" data-value="<%= upload.title %>"><%= upload.title %></p>
+  <p class="size" data-value="<%= upload.file.size %>"><%= number_to_human_size upload.file.size %></p>
+  <div class="actions"> 
+    <%= content_tag :span, t('.delete'), data: {method: :delete, remote: true, confirm: t('.confirm', default: "Sure?"), url: tiny_mce.upload_path(upload, format: :js)}  %>
+    <%= content_tag :span, t('.rename'), data: {method: :put, remote: true, prompt: t('.name'), value: upload.title, params: {column: :title}, url: tiny_mce.upload_path(upload, format: :js)}  %>
+  </div>
+<% end %>

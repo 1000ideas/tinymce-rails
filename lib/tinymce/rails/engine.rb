@@ -1,11 +1,28 @@
+# require 'app/tinymce'
+
 module TinyMCE::Rails
   class Engine < ::Rails::Engine
+    isolate_namespace TinyMCE
+
     config.tinymce = ActiveSupport::OrderedOptions.new
 
     config.tinymce.base = nil
 
     initializer "precompile", :group => :all do |app|
-      app.config.assets.precompile << "tinymce-rails.js"
+      app.config.assets.precompile << "tinymce-rails-plugin.js"
+      app.config.assets.precompile << "tinymce-content.css"
+    end
+
+    initializer "helpers" do |app|
+      ActiveSupport.on_load(:action_view) do
+        include FormHelper
+      end
+    end
+
+    initializer "model" do |app|
+      ActiveSupport.on_load(:active_record) do
+        include Fields
+      end
     end
 
     def self.base

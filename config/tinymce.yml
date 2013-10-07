@@ -1,6 +1,17 @@
 default:
   theme: modern
+simple:
+  theme: modern
   content_css: "<%= asset_path('tinymce-content.css') %>"
-  plugins: "lists anchor contextmenu image link table"
-  contextmenu: "link image inserttable | cell row column deletetable"
-  toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons"
+  menubar: false
+  statusbar: false
+  plugins: "lists contextmenu link image"
+  contextmenu: "link unlink image"
+  toolbar: "undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink image"
+advance:
+  theme: modern
+  content_css: "<%= asset_path('tinymce-content.css') %>"
+  plugins: "lists anchor contextmenu image link table hr preview searchreplace insertdatetime media code upload"
+  contextmenu: "cut copy past | link unlink image inserttable | cell row column deletetable"
+  toolbar: "cut copy paste | searchreplace | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | link unlink image media filechooser | code preview"
+  height: 300

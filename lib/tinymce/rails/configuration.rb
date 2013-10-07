@@ -23,9 +23,9 @@ module TinyMCE::Rails
 
     def load_file(path)
       @options ||= { default: {theme: 'modern'} }
+
       return unless File.exists? path
       load_yaml(path).each do |key, values|
-        # print "#{key} #{values.inspect}\n"
         @options[key.to_sym] ||= {}
         @options[key.to_sym].merge!( values.symbolize_keys! )
       end

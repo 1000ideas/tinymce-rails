@@ -1,0 +1,10 @@
+<ul class="breadcrumbs">
+  <li class="root">
+    <%= link_to t('.root'), tiny_mce.uploads_path(format: :js), data: {remote: true} %>
+  </li>
+  <% folder.try(:path).try(:each) do |folder| %>
+  <li>
+    <%= link_to folder.name, tiny_mce.uploads_path(parent: folder.id, format: :js), data: {remote: true}  %>
+  </li>    
+  <% end %>
+</ul>
