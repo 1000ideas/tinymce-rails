@@ -2,6 +2,7 @@ require 'tinymce/rails'
 require "paperclip"
 require "jquery-ui-rails"
 require "jquery-fileupload-rails"
+require "rails-i18n"
 
 module TinyMCE
   extend Rails::Helpers

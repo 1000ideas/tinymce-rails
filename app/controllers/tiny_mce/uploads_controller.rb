@@ -115,10 +115,10 @@ class TinyMce::UploadsController < ActionController::Base
   end
 
   def upload_params
-    params.require(:upload).permit(:file, :folder_id)
+    params[:upload].try(:slice, :file, :folder_id) || {}
   end
 
   def folder_params
-    params.require(:folder).permit(:name, :parent_id)
+    params[:folder].try(:slice, :name, :parent_id) || {}
   end
 end
