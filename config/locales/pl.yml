@@ -8,12 +8,12 @@ pl:
         name: "Nowa nazwa folderu"
     uploads:
       index:
-        root: "Dysk C:"
+        root: "Twoje pliki"
         upload: "Wgraj plik"
         folder: "Nowy folder"
         folder_name: "Nazwa"
       breadcrumbs:
-        root: "Dysk C:"
+        root: "Folder główny"
       empty:
         name: "Brak elementów"
       drop:
