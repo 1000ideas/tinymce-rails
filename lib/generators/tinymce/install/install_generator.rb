@@ -17,6 +17,10 @@ module TinyMCE
       def create_migration
         migration_template 'migrations/uploads_and_folders.rb', 'db/migrate/create_uploads_and_folders.rb'
       end
+
+      def add_routing
+        route "mount TinyMCE::Rails::Engine => '/tinymce'"
+      end
     end
   end
 end

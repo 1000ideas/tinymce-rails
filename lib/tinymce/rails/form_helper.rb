@@ -8,9 +8,7 @@ module TinyMCE::Rails
     end
 
     def self.included(base)
-      ActionView::Helpers::FormBuilder.instance_eval do
-        include FormBuilderMethods
-      end
+      ActionView::Helpers::FormBuilder.send :include, FormBuilderMethods
     end
 
     module FormBuilderMethods
