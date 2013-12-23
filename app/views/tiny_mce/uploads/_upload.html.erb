@@ -1,4 +1,4 @@
-<%= content_tag :li, data: {uid: upload.id, name: upload.title, link: upload.file.url, image: upload.image? } do %>
+<%= content_tag :li, data: {uid: upload.id, name: upload.title, link: upload.file.url(:original, timestamp: false), image: upload.image? } do %>
   <% unless upload.thumb.nil? %>
     <%= image_tag upload.thumb %>
   <% end %>

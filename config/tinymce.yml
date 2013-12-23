@@ -15,3 +15,4 @@ advance:
   contextmenu: "cut copy past | link unlink image inserttable | cell row column deletetable"
   toolbar: "cut copy paste | searchreplace | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | link unlink image media filechooser | code preview"
   height: 300
+  relative_urls: false
