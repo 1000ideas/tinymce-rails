@@ -12,11 +12,16 @@ module TinyMCE
 
   @@current_user_method_name = nil
 
-  mattr_accessor :authentication_method, :current_user_method_name
+  @@default_theme = :modern
+
+  @@default_skin = :lightgray
+
+  mattr_accessor :authentication_method, :current_user_method_name,
+    :default_skin, :default_theme
 
 
   def self.config
-    yield
+    yield self
   end
 
 end

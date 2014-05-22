@@ -6,11 +6,12 @@ class TinyMce::Upload < ActiveRecord::Base
   has_attached_file :file,
     styles: lambda {|a| a.instance.send :styles_for_attachment }
 
-  
   scope :for_user, lambda {|uid| where(user_id: uid) }
   scope :folder, lambda {|fid| where(folder_id: fid) }
 
-  validates :file, attachment_presence: true
+  validates :file,
+    attachment_presence: true,
+    attachment_content_type: { content_type: /.*/ }
   validates :title, presence: true
 
   before_validation :set_default_title
@@ -26,7 +27,7 @@ class TinyMce::Upload < ActiveRecord::Base
       file.url(:thumb)
     else
       nil
-    end    
+    end
   end
 
   private

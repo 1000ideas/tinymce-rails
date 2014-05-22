@@ -9,7 +9,7 @@ module TinyMCE::Rails
     end
 
     def styles
-      @styles = Configuration.new
+      @styles ||= Configuration.new
     end
 
     def style_defined? (name)
