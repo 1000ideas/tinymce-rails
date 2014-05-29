@@ -21,24 +21,14 @@ class TinyMCEUploadPlugin
     @editor = @tinymce.activeEditor
     @wm = @editor.windowManager
     @plugin = @editor.plugins.upload
-    
+
     @files = $('#upload-list-box ul')
 
     @_set_draggable()
 
-    @files.selectable(
-      filter: 'li:not(.empty)'
-      selected:  (event, ui) ->
-        if $(this).find('.ui-selected').length > 1
-          $(ui.selected).removeClass('ui-selected')
-          return false
-      unselected: (event, ui) ->
-        self.plugin.setCurrentItem(null);
-    )
-
     @folder = $('#create-folder').bind 'click', (event) ->
       event.preventDefault()
-      
+
       _data = {
         folder: {
           parent_id: $('#folder_parent_id').val()
@@ -49,7 +39,7 @@ class TinyMCEUploadPlugin
       title = $(this).text()
       label = $(this).data('prompt')
 
-      self.prompt title, label, (name) -> 
+      self.prompt title, label, (name) ->
         _data.folder.name = name
 
         $.ajax {
@@ -74,6 +64,8 @@ class TinyMCEUploadPlugin
     @sort()
     @_extend_rails_ujs()
     @_init_context_menu()
+
+    $('#upload-list-box').perfectScrollbar(includePadding: true)
 
   sort: (field, order) ->
     field ?= @files.data('sort') ? 'name'
@@ -115,23 +107,23 @@ class TinyMCEUploadPlugin
 
   _set_draggable: ->
     self = this
-    
+
     @files.children('li:not(.empty)').draggable(
       distance: 10
       revert: 'invalid'
     ).bind(
       'click',
       (event) ->
-        if $(this).hasClass 'ui-selected'
-          $(this).removeClass 'ui-selected'
+        if $(this).hasClass 'selected'
+          $(this).removeClass 'selected'
         else
-          $(this).siblings('li').removeClass('ui-selected')
-          $(this).addClass 'ui-selected'
+          $(this).siblings('li').removeClass('selected')
+          $(this).addClass 'selected'
 
-        info = $(this).filter('.ui-selected').data() ? {}
+        info = $(this).filter('.selected').data() ? {}
         self.plugin.setCurrentItem(info.name, info.link, info.image);
     )
-    
+
 
   _confirmation_popup: (link) ->
     @wm.confirm link.data('confirm'), (status) ->
@@ -193,7 +185,8 @@ class TinyMCEUploadPlugin
     @_last_menu = null
 
     _iframe_position = ->
-      _iframe = self.plugin.win.getEl().getElementsByTagName('iframe')[0]
+      _windows = self.wm.windows
+      _iframe = _windows[_windows.length - 1].getEl().getElementsByTagName('iframe')[0]
       _p = self.tinymce.DOM.getPos(_iframe);
       # debugger
       _p.y -= scrollY
@@ -228,8 +221,11 @@ class TinyMCEUploadPlugin
       if self._last_menu?
         self._last_menu.hide()
         self._last_menu = null
+      if $(event.target).closest('#upload-list-box > ul > li').length == 0
+        $('#upload-list-box > ul > li').removeClass('selected')
+        self.plugin.setCurrentItem(null, null, null);
 
-    $(document).on 'contextmenu', '#folder-list-box ul li a.name, #upload-list-box ul li', (event) ->
+    $(document).on 'contextmenu', '#folder-list-box ul li a.name, #upload-list-box ul li:not(.empty)', (event) ->
       event.preventDefault()
       element = $(this)
       menu = null

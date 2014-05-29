@@ -22,7 +22,7 @@ module TinyMCE::Rails
         options[:data] ||= {}
         options[:data][:tinymce] = type
 
-        sanitized_object_name = @object_name.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
+        sanitized_object_name = @object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
         sanitized_method_name = method.to_s.sub(/\?$/,"")
 
         _id = options.fetch("id") do

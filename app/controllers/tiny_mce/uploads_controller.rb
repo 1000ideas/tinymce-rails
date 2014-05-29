@@ -4,7 +4,7 @@ class TinyMce::UploadsController < ActionController::Base
 
   def index
     @folder = TinyMce::Folder.find(params[:parent]) if params.has_key? :parent
-    
+
     @uploads = TinyMce::Upload
       .for_user(current_user_id)
       .folder(@folder.try(:id))
@@ -34,9 +34,14 @@ class TinyMce::UploadsController < ActionController::Base
 
   def update
     @upload = TinyMce::Upload.find(params[:id])
-    @current = @params.folder
+    @current = TinyMce::Folder.find(params[:current]) if params.has_key?(:current)
 
+    upload_params = params[:upload] || {}
+    if params.has_key?(:column) &&  params.has_key?(:value)
+      upload_params[params[:column]] = params[:value]
+    end
 
+    @upload.update_attributes(upload_params)
 
     respond_to do |format|
       format.js
@@ -62,7 +67,7 @@ class TinyMce::UploadsController < ActionController::Base
     @current = TinyMce::Folder.find(params[:current]) if params.has_key?(:current)
 
     @folder.send("#{params[:column]}=", params[:value])
-    @folder.save    
+    @folder.save
 
     @folders = TinyMce::Folder
       .for_user(current_user_id)
@@ -77,7 +82,7 @@ class TinyMce::UploadsController < ActionController::Base
   def destroy_folder
     @folder = TinyMce::Folder.find(params[:id])
     @folder.destroy
-    
+
     respond_to do |format|
       format.js
     end
@@ -86,7 +91,7 @@ class TinyMce::UploadsController < ActionController::Base
   def destroy
     @upload = TinyMce::Upload.find(params[:id])
     @upload.destroy
-    
+
     respond_to do |format|
       format.js
     end

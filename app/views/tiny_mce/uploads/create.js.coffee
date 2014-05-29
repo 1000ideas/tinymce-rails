@@ -6,3 +6,4 @@
     $('#upload-list-box ul li.empty').remove()
   window.tinymceUploadPlugin.sort()
 <% end %>
+  $('#upload-list-box').perfectScrollbar('update')

@@ -2,9 +2,10 @@
 //= require jquery_ujs
 //= require jquery.ui.draggable
 //= require jquery.ui.droppable
-//= require jquery.ui.selectable
 //= require jquery.tinysort
 //= require jquery.tinysort.charorder
+//= require vendor/jquery.mousewheel
+//= require vendor/perfect-scrollbar
 //= require jquery-fileupload/basic
 //= require tinymce-rails
 //= require tinymce-upload-plugin

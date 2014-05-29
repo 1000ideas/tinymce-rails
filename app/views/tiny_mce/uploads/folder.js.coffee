@@ -11,3 +11,4 @@ $("<%=j render(@folder, current: nil) %>").appendTo('#folder-list-box > ul')
 $('#folder-list-box ul > li').tsort('a.name')
 <% end %>
 <% end %>
+$('#upload-list-box').perfectScrollbar('update')

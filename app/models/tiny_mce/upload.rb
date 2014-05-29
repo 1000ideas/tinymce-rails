@@ -16,7 +16,7 @@ class TinyMce::Upload < ActiveRecord::Base
 
   before_validation :set_default_title
 
-  attr_accessible :file, :folder_id
+  attr_accessible :file, :folder_id, :title
 
   def image?
     !!file_content_type.match(/^image/)

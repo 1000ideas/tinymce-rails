@@ -1,5 +1,6 @@
 /*
  *= require jquery.ui.selectable
+ *= require vendor/perfect-scrollbar
  *= require_self
  */
 
@@ -14,10 +15,10 @@
   box-shadow: inset 1px 1px 0 rgba(#fff, .5);
   background-color: lighten(#1E5799, 10%);
   color: #fff;
-  text-shadow: 1px 1px 0 #1E5799; 
+  text-shadow: 1px 1px 0 #1E5799;
 
   &:hover, &:focus {
-    background-color: lighten(#1E5799, 8%);    
+    background-color: lighten(#1E5799, 8%);
   }
 }
 
@@ -34,8 +35,8 @@ button {
   position: relative;
   overflow: hidden;
   @include _button;
-  
-  
+
+
   input[type=file] {
     position: absolute;
     opacity: 0;
@@ -74,8 +75,8 @@ ul.breadcrumbs {
   li {
 
     &:not(.root):before {
-      content: '»';      
-      // content: '/';      
+      content: '»';
+      // content: '/';
     }
 
     display: inline;
@@ -114,7 +115,7 @@ section.content {
       line-height: 2em;
       padding: 0 .5em;
       text-decoration: none;
-      color: #333;      
+      color: #333;
     }
 
     h2 {
@@ -193,7 +194,7 @@ section.content {
         width: 100px;
         padding: .5em;
         border: 1px solid #ddd;
-        margin: .5em;
+        margin: 0 1em 1em 0;
         vertical-align: top;
 
         div.actions {

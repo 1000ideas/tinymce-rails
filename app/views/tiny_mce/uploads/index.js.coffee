@@ -16,3 +16,5 @@ $('#upload-list-box ul > li').addClass('ui-selectee')
 $('#folder_parent_id').val('<%=j @folder.try(:id).try(:to_s) %>')
 
 window.tinymceUploadPlugin._set_draggable()
+
+$('#upload-list-box').perfectScrollbar('update')
