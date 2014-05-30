@@ -5,14 +5,16 @@ class TinyMCELoader
   constructor: ->
 
   init: (id) ->
-    editor.remove() if (editor = tinymce.get(id))?
+    @remove(id)
     @_initTinyMCE(document.getElementById(id));
+
+  remove: (id) ->
+    editor.remove() if (editor = tinymce.get(id))?
 
   _initTinyMCE: (el, idx) ->
     type = $(el).data('tinymce') ? 'default'
     type = 'default' unless TinyMCELoader._config[type]?
     options = $.extend {}, TinyMCELoader._config[type], { language: @lang() }
-
 
     $(el).tinymce(options)
 
