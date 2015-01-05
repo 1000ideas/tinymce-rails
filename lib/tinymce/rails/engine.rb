@@ -11,7 +11,7 @@ module TinyMCE::Rails
     initializer "precompile", :group => :all do |app|
       app.config.assets.precompile << "tinymce-rails-plugin.js"
       app.config.assets.precompile << "tinymce-content.css"
-      app.config.assets.precompile << "tinymce-rails-upload.css.scss"
+      app.config.assets.precompile << "tinymce-rails-upload.css"
       app.config.assets.precompile << "tinymce-rails-upload.js"
     end
 
