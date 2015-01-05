@@ -11,6 +11,8 @@ module TinyMCE::Rails
     initializer "precompile", :group => :all do |app|
       app.config.assets.precompile << "tinymce-rails-plugin.js"
       app.config.assets.precompile << "tinymce-content.css"
+      app.config.assets.precompile << "tinymce-rails-upload.css.scss"
+      app.config.assets.precompile << "tinymce-rails-upload.js"
     end
 
     initializer "helpers" do |app|
@@ -32,10 +34,10 @@ module TinyMCE::Rails
     def self.default_base
       File.join(relative_url_root || "", Rails.application.config.assets.prefix || "/", "tinymce")
     end
-    
+
     def self.relative_url_root
       config = Rails.application.config
-      
+
       if config.respond_to?(:relative_url_root)
         config.relative_url_root
       else
