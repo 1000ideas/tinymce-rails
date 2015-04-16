@@ -20,6 +20,12 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+You can override your TinyMCE configuration in config/tinymce.yml, but then you must include
+
+	<%= tinymce_init_styles %>
+
+in your layout template. This helper reloaded necessary configs at server start.
+
 ## Contributing
 
 1. Fork it
