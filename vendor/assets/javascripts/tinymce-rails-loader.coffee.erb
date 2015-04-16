@@ -4,6 +4,9 @@ class TinyMCELoader
 
   constructor: ->
 
+  setConfig: (config) ->
+    TinyMCELoader._config = config
+
   init: (id) ->
     @remove(id)
     @_initTinyMCE(document.getElementById(id));
@@ -29,4 +32,3 @@ class TinyMCELoader
     @_lang
 
 window.tinyMCELoader = new TinyMCELoader()
-

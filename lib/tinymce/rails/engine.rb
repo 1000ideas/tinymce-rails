@@ -18,6 +18,7 @@ module TinyMCE::Rails
     initializer "helpers" do |app|
       ActiveSupport.on_load(:action_view) do
         include FormHelper
+        include ApplicationHelper
       end
     end
 

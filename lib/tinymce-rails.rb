@@ -7,7 +7,6 @@ require "rails-i18n"
 module TinyMCE
   extend Rails::Helpers
 
-
   @@authentication_method = Proc.new {|method, uploads| uploads }
 
   @@current_user_method_name = nil
