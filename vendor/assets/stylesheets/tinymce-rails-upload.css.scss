@@ -171,7 +171,9 @@ section.content {
         }
 
         div.actions {
-          display: none;
+          position: absolute;
+          right: 5%;
+          top: 2%;
         }
 
       }
@@ -201,7 +203,16 @@ section.content {
         vertical-align: top;
 
         div.actions {
-          display: none;
+          position: absolute;
+          right: 5%;
+          top: 2%;
+          z-index: 10;
+          background: $secondary-color;
+          padding: 0rem 0.5rem;
+          border-radius: 100%;
+          a {
+            color: white;
+          }
         }
 
         p.name {

@@ -24,7 +24,7 @@ class TinyMCEUploadPlugin
 
     @files = $('#upload-list-box ul')
 
-    @_set_draggable()
+    @_set_selectable()
 
     @folder = $('#create-folder').bind 'click', (event) ->
       event.preventDefault()
@@ -48,9 +48,6 @@ class TinyMCEUploadPlugin
           dataType: 'script'
           data: _data
         }
-
-    @folders = $('#folder-list-box ul li a.name, #folder-list-box h2 a')
-      .droppable @_droppable_options()
 
     @uploader = $('#fileupload-wrapper input[type="file"]').fileupload {
       dataType: 'script'
@@ -105,13 +102,10 @@ class TinyMCEUploadPlugin
     _prompt.statusbar.items()[0].disabled(true)
     _prompt
 
-  _set_draggable: ->
+  _set_selectable: ->
     self = this
 
-    @files.children('li:not(.empty)').draggable(
-      distance: 10
-      revert: 'invalid'
-    ).bind(
+    @files.children('li:not(.empty)').bind(
       'click',
       (event) ->
         if $(this).hasClass 'selected'
@@ -145,40 +139,6 @@ class TinyMCEUploadPlugin
     $.rails.href = (element) ->
       element.attr('href') ? element.data('url')
 
-  _droppable_options: ->
-    self = this
-    {
-      accept: 'li'
-      greedy: true
-      hoverClass: 'drop-hover'
-      tolerance: "pointer"
-      drop: (event, ui) ->
-        _url = $('#folder-list-box')
-          .data('url')
-          .replace(':id', $(ui.draggable).data('uid'))
-          .replace(':folder_id', $(this).data('fid') ? "")
-
-        $(ui.draggable).hide()
-
-        $.ajax {
-          url: _url
-          dataType: 'json'
-          method: 'post',
-          data: {_method: 'put'}
-          success: (data) ->
-            $(ui.draggable).remove()
-            self.wm.alert(data.notice)
-          error: (data) ->
-            $(ui.draggable).css {
-              top: ''
-              left: ''
-              display: ''
-            }
-            self.wm.alert(data.join('. ') + '.')
-        }
-
-        true
-    }
 
   _init_context_menu: ->
     self = this

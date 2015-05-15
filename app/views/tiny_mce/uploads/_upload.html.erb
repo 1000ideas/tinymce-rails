@@ -5,7 +5,7 @@
   <p class="name" data-value="<%= upload.title %>"><%= upload.title %></p>
   <p class="size" data-value="<%= upload.file.size %>"><%= number_to_human_size upload.file.size %></p>
   <div class="actions"> 
-    <%= content_tag :span, t('.delete'), data: {method: :delete, remote: true, confirm: t('.confirm', default: "Sure?"), url: tiny_mce.upload_path(upload, format: :js)}  %>
-    <%= content_tag :span, t('.rename'), data: {method: :put, remote: true, prompt: t('.name'), value: upload.title, params: {column: :title}, url: tiny_mce.upload_path(upload, format: :js)}  %>
+    <%= link_to raw("&times;"), tiny_mce.upload_path(upload, format: :js), data: {method: :delete, remote: true, confirm: t('.confirm', default: "Sure?")} %>
+    <%#= content_tag :span, t('.rename'), data: {method: :put, remote: true, prompt: t('.name'), value: upload.title, params: {column: :title}, url: tiny_mce.upload_path(upload, format: :js)}  %>
   </div>
 <% end %>
